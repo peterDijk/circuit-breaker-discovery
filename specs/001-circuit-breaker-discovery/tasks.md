@@ -20,9 +20,9 @@
 
 **Purpose**: Project initialization — sbt project, dependencies, directory structure
 
-- [ ] T001 Create sbt project structure: build.sbt with Scala 3.3, cats-effect 3.5, http4s 0.23, circe 0.14 dependencies, project/build.properties with sbt 1.10
-- [ ] T002 [P] Create directory structure per plan: src/main/scala/circuitbreaker/{model,weather,cli,metrics}/ and src/test/scala/circuitbreaker/
-- [ ] T003 [P] Create project/plugins.sbt with sbt-revolver for hot-reload during development
+- [x] T001 Create sbt project structure: build.sbt with Scala 3.3, cats-effect 3.5, http4s 0.23, circe 0.14 dependencies, project/build.properties with sbt 1.10
+- [x] T002 [P] Create directory structure per plan: src/main/scala/circuitbreaker/{model,weather,cli,metrics}/ and src/test/scala/circuitbreaker/
+- [x] T003 [P] Create project/plugins.sbt with sbt-revolver for hot-reload during development
 
 ---
 
@@ -32,13 +32,13 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 [P] Define State ADT (Closed, Open, HalfOpen) in src/main/scala/circuitbreaker/model/State.scala
-- [ ] T005 [P] Define CircuitBreakerConfig case class with failureThreshold, resetTimeout, callTimeout in src/main/scala/circuitbreaker/CircuitBreakerConfig.scala
-- [ ] T006 [P] Define StateTransition case class (from, to, timestamp, reason) in src/main/scala/circuitbreaker/model/StateTransition.scala
-- [ ] T007 [P] Define WeatherResponse case class with circe decoder in src/main/scala/circuitbreaker/model/WeatherResponse.scala
-- [ ] T008 [P] Define FallbackResponse case class in src/main/scala/circuitbreaker/model/FallbackResponse.scala
-- [ ] T009 Implement CircuitBreaker core state machine using cats-effect Ref in src/main/scala/circuitbreaker/CircuitBreaker.scala — must support: protect[A](call: IO[A]): IO[Either[FallbackResponse, A]], state transitions based on failure count and timeouts, atomic state updates
-- [ ] T010 Implement WeatherClient using http4s Ember client to call Open-Meteo API in src/main/scala/circuitbreaker/weather/WeatherClient.scala — accepts city name, returns IO[WeatherResponse], respects callTimeout from config
+- [x] T004 [P] Define State ADT (Closed, Open, HalfOpen) in src/main/scala/circuitbreaker/model/State.scala
+- [x] T005 [P] Define CircuitBreakerConfig case class with failureThreshold, resetTimeout, callTimeout in src/main/scala/circuitbreaker/CircuitBreakerConfig.scala
+- [x] T006 [P] Define StateTransition case class (from, to, timestamp, reason) in src/main/scala/circuitbreaker/model/StateTransition.scala
+- [x] T007 [P] Define WeatherResponse case class with circe decoder in src/main/scala/circuitbreaker/model/WeatherResponse.scala
+- [x] T008 [P] Define FallbackResponse case class in src/main/scala/circuitbreaker/model/FallbackResponse.scala
+- [x] T009 Implement CircuitBreaker core state machine using cats-effect Ref in src/main/scala/circuitbreaker/CircuitBreaker.scala — must support: protect[A](call: IO[A]): IO[Either[FallbackResponse, A]], state transitions based on failure count and timeouts, atomic state updates
+- [x] T010 Implement WeatherClient using http4s Ember client to call Open-Meteo API in src/main/scala/circuitbreaker/weather/WeatherClient.scala — accepts city name, returns IO[WeatherResponse], respects callTimeout from config
 
 **Checkpoint**: Foundation ready — circuit breaker can protect calls and weather client can fetch data
 
@@ -52,11 +52,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Implement Repl command loop in src/main/scala/circuitbreaker/cli/Repl.scala — parse commands: "weather <city>", "status", "config", "help", "quit"; dispatch to appropriate handler
-- [ ] T012 [US1] Implement weather command handler in Repl that calls CircuitBreaker.protect(weatherClient.fetch(city)) and formats output per CLI contract (show state, temperature, failure count)
-- [ ] T013 [US1] Implement Main.scala entry point in src/main/scala/circuitbreaker/Main.scala — wire CircuitBreakerConfig (from env vars or defaults), create CircuitBreaker, create WeatherClient, launch Repl
-- [ ] T014 [US1] Implement "status" and "config" commands in Repl showing current CircuitBreaker state/metrics and configuration values
-- [ ] T015 [US1] Add console logging of state transitions — each transition prints timestamp, from-state, to-state, and reason to stdout
+- [x] T011 [US1] Implement Repl command loop in src/main/scala/circuitbreaker/cli/Repl.scala — parse commands: "weather <city>", "status", "config", "help", "quit"; dispatch to appropriate handler
+- [x] T012 [US1] Implement weather command handler in Repl that calls CircuitBreaker.protect(weatherClient.fetch(city)) and formats output per CLI contract (show state, temperature, failure count)
+- [x] T013 [US1] Implement Main.scala entry point in src/main/scala/circuitbreaker/Main.scala — wire CircuitBreakerConfig (from env vars or defaults), create CircuitBreaker, create WeatherClient, launch Repl
+- [x] T014 [US1] Implement "status" and "config" commands in Repl showing current CircuitBreaker state/metrics and configuration values
+- [x] T015 [US1] Add console logging of state transitions — each transition prints timestamp, from-state, to-state, and reason to stdout
 
 **Checkpoint**: User Story 1 fully functional — user can make weather requests, see circuit open after failures, and see requests rejected when open
 
@@ -70,9 +70,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [US2] Enhance CircuitBreaker.protect to implement half-open logic: after resetTimeout elapses, allow exactly one trial request through; if it succeeds → transition to Closed; if it fails → transition back to Open with reset timer restarted
-- [ ] T017 [US2] Update CLI output formatting to show half-open state transitions: "[HALF-OPEN] Attempting recovery..." followed by result
-- [ ] T018 [US2] Add "time until recovery" display when circuit is open — show remaining seconds until half-open transition in the rejection message
+- [x] T016 [US2] Enhance CircuitBreaker.protect to implement half-open logic: after resetTimeout elapses, allow exactly one trial request through; if it succeeds → transition to Closed; if it fails → transition back to Open with reset timer restarted
+- [x] T017 [US2] Update CLI output formatting to show half-open state transitions: "[HALF-OPEN] Attempting recovery..." followed by result
+- [x] T018 [US2] Add "time until recovery" display when circuit is open — show remaining seconds until half-open transition in the rejection message
 
 **Checkpoint**: Full circuit breaker lifecycle observable — closed → open → half-open → closed/open
 
@@ -86,11 +86,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T019 [US3] Implement CircuitBreakerMetrics in src/main/scala/circuitbreaker/CircuitBreakerMetrics.scala — track successCount, totalFailures, lastStateChange timestamp; expose via getMetrics: IO[Metrics]
-- [ ] T020 [US3] Implement transition history storage (bounded list of last 20 StateTransitions) in CircuitBreaker using a second Ref
-- [ ] T021 [US3] Implement "history" command in Repl that displays recent state transitions with timestamps and reasons per CLI contract
-- [ ] T022 [P] [US3] Implement optional MetricsServer in src/main/scala/circuitbreaker/metrics/MetricsServer.scala — http4s Ember server on localhost:8080 with GET /status and GET /history endpoints returning JSON per metrics contract
-- [ ] T023 [US3] Add "--with-metrics" flag to Main.scala that optionally starts the MetricsServer alongside the REPL
+- [x] T019 [US3] Implement CircuitBreakerMetrics in src/main/scala/circuitbreaker/CircuitBreakerMetrics.scala — track successCount, totalFailures, lastStateChange timestamp; expose via getMetrics: IO[Metrics]
+- [x] T020 [US3] Implement transition history storage (bounded list of last 20 StateTransitions) in CircuitBreaker using a second Ref
+- [x] T021 [US3] Implement "history" command in Repl that displays recent state transitions with timestamps and reasons per CLI contract
+- [x] T022 [P] [US3] Implement optional MetricsServer in src/main/scala/circuitbreaker/metrics/MetricsServer.scala — http4s Ember server on localhost:8080 with GET /status and GET /history endpoints returning JSON per metrics contract
+- [x] T023 [US3] Add "--with-metrics" flag to Main.scala that optionally starts the MetricsServer alongside the REPL
 
 **Checkpoint**: All user stories functional — full observability into circuit breaker behavior
 
@@ -100,9 +100,9 @@
 
 **Purpose**: Improvements that enhance the overall experience
 
-- [ ] T024 [P] Add configuration loading from environment variables (CB_FAILURE_THRESHOLD, CB_RESET_TIMEOUT_SECONDS, CB_CALL_TIMEOUT_SECONDS) in CircuitBreakerConfig companion object
-- [ ] T025 [P] Add "help" command output listing all available commands with brief descriptions
-- [ ] T026 Validate quickstart.md walkthrough end-to-end — ensure all documented commands work as described
+- [x] T024 [P] Add configuration loading from environment variables (CB_FAILURE_THRESHOLD, CB_RESET_TIMEOUT_SECONDS, CB_CALL_TIMEOUT_SECONDS) in CircuitBreakerConfig companion object
+- [x] T025 [P] Add "help" command output listing all available commands with brief descriptions
+- [x] T026 Validate quickstart.md walkthrough end-to-end — ensure all documented commands work as described
 
 ---
 
